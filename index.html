@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/imgmanicure1.jpg" type="image/png">
+    <link rel="stylesheet" href="">
+    <title>Aline Agendamentos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: rgb(255, 207, 207);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        #home {
+            background-image: url('img/banner1.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: black;
+        }
+
+        h2 {
+            color: #c03232;
+        }
+
+        #btnline {
+            background-color: #ffffff;
+            color: rgb(199, 48, 48);
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: medium;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #btnline:hover {
+            background-color: rgb(199, 48, 48);
+            color: white;
+        }
+
+        #cartssection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .cards {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .cards img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .nameservice {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 15px 0 5px 0;
+            color: #333;
+        }
+
+        .price {
+            color: rgb(253, 145, 145);
+            font-weight: bold;
+            font-size: 1.1em;
+            padding-bottom: 10px;
+        }
+
+        .escolhaservice {
+            background-color: #c03232;
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 90%;
+            margin: 10px auto 20px auto;
+            border: none;
+            position: relative;
+        }
+
+        .escolhaservice:hover {
+            background-color: #ff5c5c;
+        }
+
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+        }
+
+        .close {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+
+
+        .container {
+            margin-top: 30px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .map,
+        .review {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        iframe {
+            width: 100%;
+            height: 420px;
+            border: none;
+        }
+
+        .review {
+            padding: 20px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: gray;
+        }
+
+        .star.selected {
+            color: gold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .inputisi {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            outline: #242424;
+            border: 1px solid #242424;
+        }
+
+        #butonreview {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            #butonreview {
+                margin-left: 0;
+            }
+        }
+
+        /* Banner Promocional */
+        .promo-banner {
+            width: 103.3%;
+            position: relative;
+            background-color: #ff74a3;
+            background-size: cover;
+            background-position: center;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .promo-overlay {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            /* background-color: rgba(0, 0, 0, 0.4); */
+            z-index: 1;
+        }
+
+        .promo-content {
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+            color: white;
+        }
+
+        .promo-content h3 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .promo-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .promo-content button {
+            padding: 10px 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .promo-content button:hover {
+            background-color: #e73370;
+        }
+
+        /* Footer */
+        footer {
+            width: 103.2%;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: -30px;
+            margin-top: 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            width: 130%;
+            max-width: 1200px;
+        }
+
+        .footer-section {
+            width: 48%;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 10px;
+            color: #ff4081;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #ff4081;
+        }
+
+        .social-icons a {
+            display: block;
+            margin-bottom: 5px;
+            color: white;
+            font-size: 1em;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #ff4081;
+        }
+
+        .by {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .apresentacao {
+            text-decoration: none;
+            color: aliceblue;
+            font-weight: bold;
+        }
+
+        .divider {
+            width: 100%;
+            max-width: 1200px;
+            height: 1px;
+            background-color: #555;
+            margin-top: 5px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 5px;
+        }
+
+        .rights {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .footer-section {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="home">
+        <h1>Agendamento</h1>
+        <h2>Para Unhas</h2>
+        <button id="btnline">Agende agora!</button>
+    </div>
+
+    <div id="cartssection">
+
+    </div>
+
+    <!-- Banner Promocional -->
+    <div class="promo-banner">
+        <div class="promo-overlay"></div>
+        <div class="promo-content">
+            <h3>Promoção Especial!</h3>
+            <p>Cuide das suas unhas com 20% de desconto em todos os serviços de manicure e pedicure.</p>
+            <button onclick="agendarAgora()">Agendar Agora</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="map">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27728.299805632094!2d-51.17214918136596!3d-29.689693146815568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95194252cff11073%3A0x506ac3956968d3d!2sEspa%C3%A7o%20Beauty!5e0!3m2!1spt-BR!2sbr!4v1747242363862!5m2!1spt-BR!2sbr"
+                loading="lazy">
+            </iframe>
+        </div>
+
+        <div class="review">
+            <h2>Qualifique a sua experiência</h2>
+            <div class="stars" id="stars">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+
+            <input class="inputisi" type="tel" placeholder="Numero">
+            <input class="inputisi" type="email" placeholder="Email">
+            <textarea id="comment" placeholder="Deixe seu comentário..."></textarea>
+            <button id="butonreview" class="escolhaservice" onclick="submitReview()">Enviar Avaliação</button>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li>Telefone: (55) 518909-3152</li>
+                    <li>Email: contatoline@meuservico.com</li>
+                    <li>Endereço: Rua das Line, 123 - Novo Hamburgo, RS</li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Siga-nos</h3>
+                <div class="social-icons">
+                    <a href="#" target="_blank">🔗 Instagram</a>
+                    <a href="#" target="_blank">🔗 Facebook</a>
+                    <a href="#" target="_blank">🔗 WhatsApp</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="by">
+            by - <a class="apresentacao"
+                href="https://wa.me/5511953584878?text=Olá%20Gabriel,%20estou%20interessado(a)%20em%20mais%20informações%20sobre%20seus%20servicos."
+                target="_blank">Ga_Tech</a>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="footer-bottom">
+            <span class="rights">
+                &copy; 2025 Aline-Agendamentos . Todos os direitos reservados.
+            </span>
+        </div>
+    </footer>
+
+    <script>
+
+
+        // Classe de Serviço
+        class Servico {
+            constructor(nome, preco, imagem) {
+                this.nome = nome;
+                this.preco = preco;
+                this.imagem = imagem;
+            }
+        }
+
+        // Lista de Serviços
+        const servicos = [
+            new Servico('Pedicure Básica', 'R$ 50,00', 'img/imgmanicure1.jpg'),
+            new Servico('Manicure Básica', 'R$ 50,00', 'img/imgmanicure1.jpg'),
+            new Servico('Esmaltação Em Gel', 'R$ 50,00', 'img/imgmanicure1.jpg'),
+            new Servico('Spa dos pés', 'R$ 50,00', 'img/imgmanicure1.jpg'),
+            new Servico('Ofuro Dos Pés', 'R$ 50,00', 'img/imgmanicure1.jpg'),
+            new Servico('Nail Art', 'R$ 50,00', 'img/imgmanicure1.jpg'),
+            new Servico('Massagem', 'R$ 50,00', 'img/imgmanicure1.jpg')
+        ];
+
+        // Renderiza os serviços no HTML
+        const serviceList = document.getElementById('cartssection');
+        servicos.forEach(servico => {
+            const div = document.createElement('div');
+            div.classList.add('cards');
+            div.innerHTML = `
+            <img src="${servico.imagem}" alt="${servico.nome}">
+            <p class="nameservice">${servico.nome}</p>
+            <p class="price">${servico.preco}</p>
+            <button onclick="openModal('${servico.nome}')" class="escolhaservice">
+                Agendar dia e hora
+            </button>
+        `;
+            serviceList.appendChild(div);
+        });
+
+        // Função para abrir o modal e passar o nome do serviço
+        function openModal(servicoNome) {
+            // Remove o modal anterior, se existir
+            const existingModal = document.getElementById("myModal");
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Cria a estrutura do Modal
+            const modal = document.createElement('div');
+            modal.id = "myModal";
+            modal.classList.add('modal');
+            modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Escolha a Data e Hora</h2>
+                <p><strong>Serviço Selecionado:</strong> ${servicoNome}</p>
+                <input id="dia" type="date">
+                <input id="hora" type="time" min="06:00" max="23:00" style="margin-top: 10px;">
+                <button onclick="sendWhatsAppMessage('${servicoNome}')">
+                    Agendar dia e hora
+                </button>
+            </div>
+        `;
+
+            // Adiciona o Modal ao body
+            document.body.appendChild(modal);
+
+            // Exibe o modal
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Função para agendar o serviço e abrir o WhatsApp
+        function sendWhatsAppMessage(servicoNome) {
+            const dia = document.getElementById('dia').value;
+            const hora = document.getElementById('hora').value;
+
+            if (dia && hora) {
+                const phoneNumber = "555189093152"; // Substitua pelo número desejado
+                const message = `Olá, gostaria de agendar o serviço: ${servicoNome}, no dia ${dia} às ${hora}.`;
+                const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+                window.open(url, "_blank");
+            } else {
+                alert("Por favor, preencha a data e a hora corretamente.");
+            }
+        }
+
+        const stars = document.querySelectorAll('.star');
+        let rating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                rating = star.getAttribute('data-value');
+                stars.forEach(s => s.classList.remove('selected'));
+                star.classList.add('selected');
+                for (let i = 0; i < rating; i++) {
+                    stars[i].classList.add('selected');
+                }
+            });
+        });
+
+        function submitReview() {
+            const comment = document.getElementById('comment').value;
+            if (rating === 0 || comment.trim() === '') {
+                alert('Por favor, preencha todos os campos.');
+            } else {
+                alert(`Avaliação enviada! Nota: ${rating}, Comentário: "${comment}"`);
+                document.getElementById('comment').value = '';
+                stars.forEach(s => s.classList.remove('selected'));
+                rating = 0;
+            }
+        }
+
+        function agendarAgora() {
+            const telefone = "555189093152"; // Substitua pelo seu número
+            const mensagem = "Olá, gostaria de agendar um horário com o desconto promocional.";
+            const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, "_blank");
+        }
+
+    </script>
+
+</body>
+
+</html>
